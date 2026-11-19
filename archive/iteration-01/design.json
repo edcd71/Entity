@@ -1,0 +1,331 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-30T23:43:20.397180+00:00",
+  "title": "Design System: entity",
+  "extensions": {
+    "shadows": [
+      {
+        "name": "rail",
+        "value": "0 8px 18px rgba(0,0,0,.14)",
+        "purpose": "Lift the draggable blurred rail."
+      },
+      {
+        "name": "flyout",
+        "value": "0 8px 25px #00000012",
+        "purpose": "Separate right-side options."
+      },
+      {
+        "name": "tools",
+        "value": "0 6px 22px #00000004",
+        "purpose": "Subtle desktop panel depth."
+      },
+      {
+        "name": "drawer",
+        "value": "0 10px 80px #0003",
+        "purpose": "Lift mobile tools over media."
+      }
+    ],
+    "motion": [
+      {
+        "name": "elastic",
+        "value": "cubic-bezier(.18,1.42,.32,1)",
+        "purpose": "Rail width and active selection."
+      },
+      {
+        "name": "rail-width",
+        "value": ".42s",
+        "purpose": "Icon-to-label sizing."
+      },
+      {
+        "name": "cube",
+        "value": "transform .75s cubic-bezier(.2,.82,.25,1)",
+        "purpose": "Month rotations; removed under reduced motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "grid-medium",
+        "value": "1200px"
+      },
+      {
+        "name": "tools-drawer",
+        "value": "960px"
+      },
+      {
+        "name": "mobile",
+        "value": "640px"
+      }
+    ],
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Primary",
+        "tonalRamp": [
+          "oklch(15% 0.06315 128.91)",
+          "oklch(26.43% 0.06315 128.91)",
+          "oklch(37.86% 0.06315 128.91)",
+          "oklch(49.29% 0.06315 128.91)",
+          "oklch(60.71% 0.06315 128.91)",
+          "oklch(72.14% 0.06315 128.91)",
+          "oklch(83.57% 0.06315 128.91)",
+          "oklch(95% 0.06315 128.91)"
+        ]
+      },
+      "accent-soft": {
+        "role": "primary",
+        "displayName": "Accent soft",
+        "tonalRamp": [
+          "oklch(15% 0.01652 121.78)",
+          "oklch(26.43% 0.01652 121.78)",
+          "oklch(37.86% 0.01652 121.78)",
+          "oklch(49.29% 0.01652 121.78)",
+          "oklch(60.71% 0.01652 121.78)",
+          "oklch(72.14% 0.01652 121.78)",
+          "oklch(83.57% 0.01652 121.78)",
+          "oklch(95% 0.01652 121.78)"
+        ]
+      },
+      "background": {
+        "role": "neutral",
+        "displayName": "Background",
+        "tonalRamp": [
+          "oklch(15% 0.00793 106.55)",
+          "oklch(26.43% 0.00793 106.55)",
+          "oklch(37.86% 0.00793 106.55)",
+          "oklch(49.29% 0.00793 106.55)",
+          "oklch(60.71% 0.00793 106.55)",
+          "oklch(72.14% 0.00793 106.55)",
+          "oklch(83.57% 0.00793 106.55)",
+          "oklch(95% 0.00793 106.55)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "tonalRamp": [
+          "oklch(15% 0.00526 106.50)",
+          "oklch(26.43% 0.00526 106.50)",
+          "oklch(37.86% 0.00526 106.50)",
+          "oklch(49.29% 0.00526 106.50)",
+          "oklch(60.71% 0.00526 106.50)",
+          "oklch(72.14% 0.00526 106.50)",
+          "oklch(83.57% 0.00526 106.50)",
+          "oklch(95% 0.00526 106.50)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "tonalRamp": [
+          "oklch(15% 0.01968 136.25)",
+          "oklch(26.43% 0.01968 136.25)",
+          "oklch(37.86% 0.01968 136.25)",
+          "oklch(49.29% 0.01968 136.25)",
+          "oklch(60.71% 0.01968 136.25)",
+          "oklch(72.14% 0.01968 136.25)",
+          "oklch(83.57% 0.01968 136.25)",
+          "oklch(95% 0.01968 136.25)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "tonalRamp": [
+          "oklch(15% 0.02580 126.56)",
+          "oklch(26.43% 0.02580 126.56)",
+          "oklch(37.86% 0.02580 126.56)",
+          "oklch(49.29% 0.02580 126.56)",
+          "oklch(60.71% 0.02580 126.56)",
+          "oklch(72.14% 0.02580 126.56)",
+          "oklch(83.57% 0.02580 126.56)",
+          "oklch(95% 0.02580 126.56)"
+        ]
+      },
+      "separator": {
+        "role": "neutral",
+        "displayName": "Separator",
+        "tonalRamp": [
+          "oklch(15% 0.01492 115.06)",
+          "oklch(26.43% 0.01492 115.06)",
+          "oklch(37.86% 0.01492 115.06)",
+          "oklch(49.29% 0.01492 115.06)",
+          "oklch(60.71% 0.01492 115.06)",
+          "oklch(72.14% 0.01492 115.06)",
+          "oklch(83.57% 0.01492 115.06)",
+          "oklch(95% 0.01492 115.06)"
+        ]
+      },
+      "dark-background": {
+        "role": "neutral",
+        "displayName": "Dark background",
+        "tonalRamp": [
+          "oklch(15% 0.00738 145.31)",
+          "oklch(26.43% 0.00738 145.31)",
+          "oklch(37.86% 0.00738 145.31)",
+          "oklch(49.29% 0.00738 145.31)",
+          "oklch(60.71% 0.00738 145.31)",
+          "oklch(72.14% 0.00738 145.31)",
+          "oklch(83.57% 0.00738 145.31)",
+          "oklch(95% 0.00738 145.31)"
+        ]
+      },
+      "dark-surface": {
+        "role": "neutral",
+        "displayName": "Dark surface",
+        "tonalRamp": [
+          "oklch(15% 0.01249 135.08)",
+          "oklch(26.43% 0.01249 135.08)",
+          "oklch(37.86% 0.01249 135.08)",
+          "oklch(49.29% 0.01249 135.08)",
+          "oklch(60.71% 0.01249 135.08)",
+          "oklch(72.14% 0.01249 135.08)",
+          "oklch(83.57% 0.01249 135.08)",
+          "oklch(95% 0.01249 135.08)"
+        ]
+      },
+      "dark-ink": {
+        "role": "neutral",
+        "displayName": "Dark ink",
+        "tonalRamp": [
+          "oklch(15% 0.01501 119.12)",
+          "oklch(26.43% 0.01501 119.12)",
+          "oklch(37.86% 0.01501 119.12)",
+          "oklch(49.29% 0.01501 119.12)",
+          "oklch(60.71% 0.01501 119.12)",
+          "oklch(72.14% 0.01501 119.12)",
+          "oklch(83.57% 0.01501 119.12)",
+          "oklch(95% 0.01501 119.12)"
+        ]
+      },
+      "dark-muted": {
+        "role": "neutral",
+        "displayName": "Dark muted",
+        "tonalRamp": [
+          "oklch(15% 0.02536 125.34)",
+          "oklch(26.43% 0.02536 125.34)",
+          "oklch(37.86% 0.02536 125.34)",
+          "oklch(49.29% 0.02536 125.34)",
+          "oklch(60.71% 0.02536 125.34)",
+          "oklch(72.14% 0.02536 125.34)",
+          "oklch(83.57% 0.02536 125.34)",
+          "oklch(95% 0.02536 125.34)"
+        ]
+      },
+      "dark-separator": {
+        "role": "neutral",
+        "displayName": "Dark separator",
+        "tonalRamp": [
+          "oklch(15% 0.02308 135.18)",
+          "oklch(26.43% 0.02308 135.18)",
+          "oklch(37.86% 0.02308 135.18)",
+          "oklch(49.29% 0.02308 135.18)",
+          "oklch(60.71% 0.02308 135.18)",
+          "oklch(72.14% 0.02308 135.18)",
+          "oklch(83.57% 0.02308 135.18)",
+          "oklch(95% 0.02308 135.18)"
+        ]
+      },
+      "dark-primary": {
+        "role": "primary",
+        "displayName": "Dark primary",
+        "tonalRamp": [
+          "oklch(15% 0.06169 126.21)",
+          "oklch(26.43% 0.06169 126.21)",
+          "oklch(37.86% 0.06169 126.21)",
+          "oklch(49.29% 0.06169 126.21)",
+          "oklch(60.71% 0.06169 126.21)",
+          "oklch(72.14% 0.06169 126.21)",
+          "oklch(83.57% 0.06169 126.21)",
+          "oklch(95% 0.06169 126.21)"
+        ]
+      },
+      "dark-accent-soft": {
+        "role": "primary",
+        "displayName": "Dark accent soft",
+        "tonalRamp": [
+          "oklch(15% 0.03328 131.63)",
+          "oklch(26.43% 0.03328 131.63)",
+          "oklch(37.86% 0.03328 131.63)",
+          "oklch(49.29% 0.03328 131.63)",
+          "oklch(60.71% 0.03328 131.63)",
+          "oklch(72.14% 0.03328 131.63)",
+          "oklch(83.57% 0.03328 131.63)",
+          "oklch(95% 0.03328 131.63)"
+        ]
+      }
+    }
+  },
+  "components": [
+    {
+      "name": "Outline action",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Surface action used for loading more and stepping controls.",
+      "html": "<button class=\"ds-outline\">Load more</button>",
+      "css": ".ds-outline{color:var(--ink,#31382e);font-family:var(--font-ui,\"Geist Serif\",Georgia,serif);cursor:pointer;border:1px solid var(--line,#dddfd4);border-radius:5px;background:var(--surface,#fcfcf8);padding:10px 22px;font-size:14px}.ds-outline:hover{background:var(--accent-soft,#e7ebdf)}.ds-outline:focus-visible{outline:2px solid var(--accent,#697c54);outline-offset:4px}"
+    },
+    {
+      "name": "Text action",
+      "kind": "button",
+      "refersTo": "button-text",
+      "description": "Quiet secondary action.",
+      "html": "<button class=\"ds-text\">Save swatch +</button>",
+      "css": ".ds-text{color:var(--ink,#31382e);font-family:var(--font-ui,\"Geist Serif\",Georgia,serif);cursor:pointer;border:0;background:none;color:var(--muted,#697060);font-size:13px;padding:3px 0}.ds-text:hover{color:var(--ink,#31382e)}.ds-text:focus-visible{outline:2px solid var(--accent,#697c54);outline-offset:4px}"
+    },
+    {
+      "name": "Hex field",
+      "kind": "input",
+      "refersTo": "",
+      "description": "Underline field for a target hex.",
+      "html": "<label class=\"ds-field\">TARGET HEX<input aria-label=\"Target hex\" value=\"#9A7857\" maxlength=\"7\"></label>",
+      "css": ".ds-field{display:block;color:var(--muted,#697060);font:7px var(--font-mono,\"Geist Mono\",monospace)}.ds-field input{display:block;width:180px;border:0;border-bottom:1px solid var(--line,#dddfd4);background:none;color:var(--ink,#31382e);font:12px var(--font-mono,\"Geist Mono\",monospace);letter-spacing:.02em;padding:4px 0;margin-top:4px}.ds-field input:hover{border-color:var(--accent,#697c54)}.ds-field input:focus-visible{outline:2px solid var(--accent,#697c54);outline-offset:4px}"
+    },
+    {
+      "name": "Rail selection",
+      "kind": "nav",
+      "refersTo": "navigation",
+      "description": "Compact source-derived rail selection treatment; glyph shown is the existing camera outline.",
+      "html": "<nav class=\"ds-rail\" aria-label=\"Primary\"><button class=\"ds-nav\" aria-label=\"Library\" aria-current=\"page\"><svg viewBox=\"0 0 20 20\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"><path d=\"M3 6h3l1-2h6l1 2h3v10H3Z\"/><circle cx=\"10\" cy=\"10.5\" r=\"3\"/></svg></button></nav>",
+      "css": ".ds-rail{display:flex;justify-content:center;width:54px;padding:18px 0 7px;background:var(--rail,rgba(247,251,245,.68));border-radius:8px;box-shadow:0 8px 18px rgba(0,0,0,.14);backdrop-filter:blur(10px)}.ds-nav{color:var(--ink,#31382e);font-family:var(--font-ui,\"Geist Serif\",Georgia,serif);cursor:pointer;position:relative;width:42px;min-height:36px;border:0;border-radius:5px;display:grid;place-items:center;background:var(--accent-soft,#e7ebdf);transform:scale(1.04);transition:transform .34s cubic-bezier(.18,1.42,.32,1)}.ds-nav:before{content:\"\";position:absolute;left:-5px;width:2px;height:12px;background:var(--accent,#697c54)}.ds-nav:hover{color:var(--accent,#697c54)}.ds-nav:focus-visible{outline:2px solid var(--accent,#697c54);outline-offset:4px}"
+    },
+    {
+      "name": "Saved reference",
+      "kind": "chip",
+      "refersTo": "swatch-reference",
+      "description": "Sampled hex with removable user reference.",
+      "html": "<span class=\"ds-chip\"><button class=\"ds-use\"><i></i>#9A7857</button><button class=\"ds-remove\" aria-label=\"Remove reference\">\u00d7</button></span>",
+      "css": ".ds-chip{display:inline-flex;border:1px solid var(--line,#dddfd4);border-radius:3px;overflow:hidden}.ds-chip button{color:var(--ink,#31382e);font-family:var(--font-ui,\"Geist Serif\",Georgia,serif);cursor:pointer;background:none;border:0;padding:4px 5px;font-size:10px}.ds-use{display:flex;align-items:center;gap:5px}.ds-use i{width:12px;height:12px;background:#9a7857;border-radius:2px}.ds-chip button:hover{background:var(--accent-soft,#e7ebdf)}.ds-chip button:focus-visible{outline:2px solid var(--accent,#697c54);outline-offset:4px}"
+    },
+    {
+      "name": "Tools container",
+      "kind": "card",
+      "refersTo": "tools",
+      "description": "Persistent desktop container for controls and inspected metadata.",
+      "html": "<section class=\"ds-tools\"><span>C / TOOLS</span><h2>Tools</h2><p>Select media to inspect its metadata.</p></section>",
+      "css": ".ds-tools{width:256px;padding:20px 18px;background:var(--surface,#fcfcf8);color:var(--ink,#31382e);border:1px solid var(--line,#dddfd4);border-radius:8px;box-shadow:0 6px 22px #00000004;font-family:var(--font-ui,\"Geist Serif\",Georgia,serif)}.ds-tools span{font:8px var(--font-mono,\"Geist Mono\",monospace);color:var(--muted,#697060)}.ds-tools h2{font-size:29px;letter-spacing:-.8px;font-weight:400;margin:9px 0 18px}.ds-tools p{font-size:13px;line-height:1.7;color:var(--muted,#697060)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "",
+    "overview": "The implemented first iteration combines a compact source-derived navigation rail, a centered chronological media workspace, and persistent desktop tools. Real imported photographs carry the visual emphasis; serif controls and monospaced metadata keep navigation and file facts distinguishable.\n\nThis documents the current ivory/olive implementation and confirmed user choices. No brand metaphor has been selected; navigation names and order remain provisional.",
+    "keyCharacteristics": [
+      "Source rail 04 interactions and Stoneware glyphs.",
+      "A / B / C workspace with a stable centered cube.",
+      "Local fonts, actual media, explicit data provenance."
+    ],
+    "rules": [],
+    "dos": [
+      "Do display entity in lowercase using the supplied Geist Serif.",
+      "Do preserve source rail 04 glyphs, label toggle, collapse control, flyouts, drag handle, color shader, and active selection.",
+      "Do keep the cube centered in B when inspecting media in C.",
+      "Do provide keyboard controls, accessible names in icon mode, visible focus, and reduced motion.",
+      "Do distinguish embedded metadata, missing data, and preview-derived color."
+    ],
+    "donts": [
+      "Don't replace the source rail with a generic sidebar.",
+      "Don't invent capture dates, locations, or decorative generated media.",
+      "Don't present user-supplied Pantone references as official matches.",
+      "Don't change originals or imply generated previews apply AAE edits."
+    ]
+  }
+}

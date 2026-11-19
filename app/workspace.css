@@ -1,0 +1,110 @@
+.workspace {
+  --card-width: clamp(240px, 31vw, 480px);
+  --tools-width: 176px;
+  --rows: 8;
+  grid-template-columns: var(--card-width) 12px var(--tools-width) minmax(0, 1fr);
+  grid-template-areas: "card splitter tools photos";
+  overflow: hidden;
+  transition: grid-template-columns .46s cubic-bezier(.22, 1, .36, 1);
+}
+.workspace[data-card-state="docked"] {
+  grid-template-columns: 0 var(--tools-width) 12px minmax(0, 1fr);
+  grid-template-areas: "card tools splitter photos";
+}
+.workspace.resizing { transition: none; cursor: col-resize; user-select: none; }
+.workspace > .lead-card {
+  grid-area: card;
+  min-width: 0;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  overflow-x: hidden;
+}
+.workspace .lead-quote { grid-row: 3; }
+.workspace .collection-label { grid-row: 4; }
+.workspace[data-card-state="docked"] > .lead-card { visibility: hidden; pointer-events: none; }
+.workspace #photos { grid-area: photos; min-width: 0; min-height: 0; grid-template-columns: none; }
+.workspace-controls {
+  grid-area: tools;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  container-type: size;
+  background: var(--theme-control-surface);
+  color: var(--theme-ink);
+  border-inline-end: 1px solid var(--theme-rule);
+  z-index: 3;
+}
+.rail-surface-heading {
+  flex: none;
+  padding: 23px 20px 18px;
+  font: 10px/1 var(--font-mono);
+  letter-spacing: .10em;
+  text-transform: uppercase;
+  border-block-end: 1px solid var(--theme-rule);
+}
+.control-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--theme-rule) transparent;
+  touch-action: pan-y;
+  overflow-anchor: none;
+}
+.control-scroll:focus-visible { outline: 1px solid var(--theme-ink); outline-offset: -2px; }
+.workspace-controls .control-dock {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 18px 14px 32px;
+  min-height: 100%;
+}
+.workspace-controls .control-rail:not([popover]) {
+  --available-height: max(234px, calc(100cqh - 80px));
+  width: 100%;
+  cursor: default;
+  touch-action: pan-y;
+  box-shadow: inset 0 0 0 1px var(--theme-rule), 0 3px 8px #0001;
+}
+.workspace-controls .control-rail:not([popover]) .pad-title { visibility: visible; }
+.workspace-controls .control-rail:not([popover]) .rail-toggle { align-self: flex-end; margin-right: 16px; touch-action: none; }
+.workspace-controls .rail-grip { touch-action: none; }
+.workspace-splitter {
+  grid-area: splitter;
+  z-index: 4;
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-inline: 1px solid var(--theme-rule);
+  background: var(--theme-surface);
+  color: var(--theme-ink);
+  cursor: col-resize;
+  touch-action: none;
+}
+.workspace-splitter::before { content: ''; position: absolute; inset: 0 -5px; }
+.workspace-splitter span { display: grid; place-items: center; width: 100%; height: 64px; border-radius: 5px; background: color-mix(in srgb, currentColor 14%, transparent); }
+.workspace-splitter span::after { content: ''; width: 4px; height: 4px; border: solid currentColor; border-width: 0 0 1px 1px; transform: rotate(45deg); }
+[data-card-state="docked"] .workspace-splitter span::after { transform: rotate(225deg); }
+.workspace-splitter:hover span, .workspace.resizing .workspace-splitter span { background: color-mix(in srgb, currentColor 28%, transparent); }
+.workspace-splitter:focus-visible { outline: none; }
+.workspace-splitter:focus-visible span { outline: 2px solid var(--theme-ink); outline-offset: -2px; }
+@media (max-width: 800px) {
+  .workspace { --tools-width: 88px; position: relative; }
+  .workspace:has(.control-rail:not(.collapsed):not([popover])) { --tools-width: min(176px, 66vw); }
+  .workspace[data-card-state="open"] { grid-template-columns: 0 var(--tools-width) 12px minmax(0, 1fr); grid-template-areas: "card tools splitter photos"; }
+  .workspace[data-card-state="open"] > .lead-card { position: absolute; grid-area: auto; inset: 0 auto 0 0; width: var(--card-width); z-index: 5; }
+  .workspace[data-card-state="open"] > .workspace-splitter { position: absolute; grid-area: auto; inset: 0 auto 0 var(--card-width); width: 12px; z-index: 6; }
+  .workspace-controls .control-dock { padding-inline: 10px; }
+  .rail-surface-heading { padding: 23px 10px 18px; font-size: 8px; letter-spacing: .02em; }
+}
+@container (max-width: 120px) {
+  .workspace-controls .control-rail:not([popover]) .pad-title { visibility: hidden; }
+  .workspace-controls .control-rail:not([popover]) .rail-toggle { margin-right: 21px; }
+}
+@media (prefers-reduced-motion: reduce) { .workspace { transition: none; } }

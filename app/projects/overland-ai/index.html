@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en" data-theme="blue">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="An independent design-engineering study of field-test replay, sensor uncertainty, and issue handoff for autonomous ground vehicles.">
+  <title>Field-test replay for ground autonomy · Entity</title>
+  <link rel="icon" href="/favicon.svg">
+  <link rel="stylesheet" href="/assets/fonts/fonts.css">
+  <link rel="stylesheet" href="/app/themes.css">
+  <link rel="stylesheet" href="article.css">
+  <script>
+    try {
+      const theme = localStorage.getItem('entity-theme');
+      if (['light', 'dark', 'blue'].includes(theme)) document.documentElement.dataset.theme = theme;
+    } catch {}
+  </script>
+</head>
+<body>
+  <a class="skip" href="#study">Skip to case study</a>
+  <header class="site-bar">
+    <div class="page-width">
+      <a class="wordmark" href="/app/grid.html">Entity</a>
+      <span>Project study</span>
+    </div>
+  </header>
+
+  <main id="study">
+    <header class="hero page-width">
+      <div class="hero-copy">
+        <h1>Field-test replay for ground autonomy</h1>
+        <p class="deck">Turning an interrupted vehicle test into an issue another engineer can reproduce.</p>
+        <p class="byline">Evan Cariss <span aria-hidden="true">·</span> Product design &amp; design engineering</p>
+        <a class="launch" href="replay/index.html">Open interactive replay <span aria-hidden="true">↗</span></a>
+      </div>
+      <figure class="hero-figure">
+        <a href="replay/index.html" aria-label="Open the simulated field-test replay">
+          <img src="images/overdrive-fusion-desktop.png" alt="Field-test replay with an Ellensburg-area contour map, source evidence, sensor fusion, and vehicle telemetry." width="1440" height="1340">
+        </a>
+        <figcaption><strong>SCENARIO · NOT LIVE</strong><span>Run FT-024 at 01:10</span></figcaption>
+      </figure>
+    </header>
+
+    <article class="page-width story" aria-label="Case study">
+      <section class="story-block">
+        <h2>The handoff problem</h2>
+        <div class="prose">
+          <p>A test vehicle paused. The replay attributed the stop to the operator. The simulator recorded a different account. If you weren't at the test, which record would you trust, and could you reproduce the discrepancy on your own?</p>
+          <p>I built a replay that keeps the vehicle record, the interface label, and the field note attached to their sources. The prototype uses a fictional supply run to explore whether that evidence can travel intact from the field to software engineering.</p>
+        </div>
+      </section>
+
+      <section class="story-block">
+        <h2>Why Overland AI</h2>
+        <div class="prose">
+          <p>Overland AI builds ground autonomy software and vehicles. <strong>OverDrive</strong> handles onboard perception and driving. <strong>SPARK</strong> brings the supporting hardware and software to existing vehicles. <strong>OverWatch</strong> gives operators a way to assign tasks and view vehicle status. Overland has identified field support and operational integration as growth priorities. That makes the handoff between field testing and software engineering a workflow worth investigating. <span class="references"><a href="https://www.diu.mil/solutions/portfolio/catalog/a0T83000000Eec8EAC-a0hcr00000BCmDpAAL">DIU product catalog</a> · <a href="https://www.overland.ai/news/overland-ai-launches-spark-to-deliver-instant-vehicle-autonomy-to-military-fleets">SPARK announcement</a> · <a href="https://www.overland.ai/news/overland-ai-raises-100-million-to-scale-ground-autonomy-with-u-s-armed-forces">Overland funding priorities</a></span></p>
+        </div>
+      </section>
+
+      <section class="story-block">
+        <h2>Follow one interrupted run</h2>
+        <div class="prose">
+          <ol class="event-list">
+            <li><time datetime="PT1M12S">01:12</time><span><strong>Scripted pause.</strong> Simulator event E-031 records the intended stop before waypoint three.</span></li>
+            <li><time datetime="PT1M13S">01:13</time><span><strong>Operator stop.</strong> Replay marker R-014 assigns a different cause.</span></li>
+            <li><time datetime="PT1M20S">01:20</time><span><strong>No manual stop requested.</strong> Field note N-007 captures the supervisor’s observation.</span></li>
+          </ol>
+          <p>Select a record to seek, pin the evidence, and export a Markdown issue with the fixture ID, timestamps, expected and observed behavior, and reproduction steps. The issue leaves the cause of the incorrect label unconfirmed.</p>
+          <p>The map uses public USGS elevation data from the Ellensburg area with hillshade and 50 m contours. The route is drawn schematically. Synthetic one-second telemetry tracks speed, distance, battery charge, and packet age. The later recorder gap is a separate event from the scripted pause. <span class="references"><a href="https://www.usgs.gov/3d-elevation-program/about-3dep-products-services">USGS 3D Elevation Program</a></span></p>
+        </div>
+      </section>
+
+      <section class="story-block">
+        <h2>How the estimates work</h2>
+        <div class="prose">
+          <p><strong>LiDAR</strong> measures the time a light pulse takes to return. Range is half the round-trip distance. <strong>Stereo cameras</strong> estimate depth from the horizontal shift between matched features in two images. Both describe nearby geometry. <strong>GPS</strong> provides a geographic reference for position. <span class="references"><a href="https://science.gsfc.nasa.gov/attic/glas/human.html">NASA on laser ranging</a> · <a href="https://docs.opencv.org/4.x/dd/d53/tutorial_py_depthmap.html">OpenCV stereo depth guide</a></span></p>
+          <dl class="math">
+            <div><dt>LiDAR range</dt><dd><code>R ≈ c × Δt / 2</code><span>A 100 ns round trip is about 15.0 m.</span></dd></div>
+            <div><dt>Stereo depth</dt><dd><code>Z = f × B / d</code><span>800 px focal length × 0.20 m baseline ÷ 32 px disparity gives 5.0 m.</span></dd></div>
+            <div><dt>Scalar fusion</dt><dd><code>x̂ = x̂<sub>onboard</sub> + K × (x<sub>GPS</sub> − x̂<sub>onboard</sub>)</code><span>At 01:10, the illustrative gain of 0.20 gives 10.0 + 0.20 × (14.0 − 10.0) = 10.8 m.</span></dd></div>
+          </dl>
+          <p>The fusion view plays back precomputed examples on a local test axis. It shows each input, the resulting estimate, and its uncertainty. Overland has described its work in multi-sensor state estimation. The production estimator remains undisclosed. <span class="references"><a href="https://cs-www.cs.yale.edu/homes/yry/readings/general/Kalman1960.pdf">Kalman’s original paper</a> · <a href="https://ats.rippling.com/en-GB/overland-ai/jobs/57abc30d-f662-4822-a7c9-d4fd2b12be61">Overland’s state estimation engineering description</a></span></p>
+          <figure class="inline-capture">
+            <img src="images/overdrive-fusion-detail.png" alt="At 01:10, the onboard estimate is 10.0 ± 1.0 m, GPS is 14.0 ± 2.0 m, and the fused estimate is 10.8 ± 0.89 m." width="881" height="425" loading="lazy">
+            <figcaption><time datetime="PT1M10S">01:10</time><span>The simulated GPS fix and onboard estimate are 4.0 m apart.</span></figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="story-block proof-block">
+        <h2>Held data and fresh data</h2>
+        <div class="prose">
+          <p>At 01:16 the replay holds the 01:13 sample and marks it <strong>Held</strong>. At 01:18 a fresh fix brings GPS closer to the onboard estimate. The uncertainty bars show one standard deviation and retain the same widths in this fixture.</p>
+        </div>
+        <div class="comparison">
+          <figure>
+            <img src="images/overdrive-fusion-0116.png" alt="Held 01:13 sample at replay time 01:16. Onboard 11.1 m, GPS 15.0 m, fused 11.9 m." width="881" height="443" loading="lazy">
+            <figcaption><time datetime="PT1M16S">01:16</time><span>Held sample. GPS and onboard estimates differ by 3.9 m.</span></figcaption>
+          </figure>
+          <figure>
+            <img src="images/overdrive-fusion-0118.png" alt="Fresh 01:18 sample. Onboard 11.1 m, GPS 11.5 m, fused 11.2 m." width="881" height="425" loading="lazy">
+            <figcaption><time datetime="PT1M18S">01:18</time><span>Fresh sample. The difference falls to 0.4 m.</span></figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="story-block">
+        <h2>What I’d test with Overland</h2>
+        <div class="prose">
+          <p>I’d shadow a field-test cycle, follow an issue from first observation to software triage, and prototype an improvement at the point where context is hardest to preserve. Then I’d give the report and fixture to an engineer who missed the run. I’d measure time to a usable report, independent reproduction success, and how many follow-up questions they need.</p>
+          <p>That is the work I’d bring as a product designer and design engineer: observe the real workflow, translate it into an interaction, and build a working test of the idea. The workspace and exports were verified in Chrome at desktop and phone widths. The adoption and efficiency hypotheses remain to be tested with field and software teams.</p>
+        </div>
+      </section>
+    </article>
+  </main>
+  <footer class="page-width site-footer">
+    <a href="/app/grid.html">Back to Entity</a>
+    <span>Independent portfolio concept</span>
+  </footer>
+</body>
+</html>

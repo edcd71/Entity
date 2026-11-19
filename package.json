@@ -1,0 +1,25 @@
+{
+  "name": "entity",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "dev": "node scripts/serve.mjs",
+    "launch": "bash scripts/launch-entity.sh",
+    "install:launcher": "node scripts/install-launcher.mjs",
+    "build:launcher-icon": "swift -module-cache-path /private/tmp/entity-swift-module-cache scripts/build-launcher-icon.swift",
+    "apply:launcher-icon": "node scripts/apply-launcher-icon.mjs",
+    "index-media": "bash scripts/index-media.sh",
+    "check": "node --check app/sphere.js && node --check app/atmosphere.js && node --check app/moonlight.js && node --check app/space.js && node --check app/grid.js && node --check app/grid-hover.js && node --check app/grid-hover-three.js && node --check app/hover-motion.js && node --check app/title-tiles.js && node --check app/title-three.js && node --check app/title-glyphs.js && node --check app/theme-control.js && node --check app/location-control.js && node --check app/time-control.js && node --check app/moments.js && node --check app/moments-control.js && node --check app/date-rail.js && node --check app/color-pad.js && node --check app/floating-rail.js && node --check app/image-metadata.js && node --check app/photo-detail.js && node --check scripts/serve.mjs && node --check app/pixel-art.js && node --check app/pixel-control.js && node --check app/grid-effects.js && node --check app/mead-effect.js && node --check app/mead-control.js && node --check app/effect-worker.js && node --check app/detail-effect.js && node --check app/moebius-effect.js && node --check app/moebius-control.js && node --check app/paint-effects.js && node --check app/workspace.js && node --check app/slideshow.js",
+    "build:grid": ".venv/bin/python scripts/build-grid.py",
+    "build:locations": ".venv/bin/python scripts/photo_locations.py",
+    "build:cube": ".venv/bin/python scripts/build-cube.py"
+  },
+  "devDependencies": {
+    "playwright": "^1.64.1"
+  },
+  "dependencies": {
+    "exiftool-vendored": "^39.1.0",
+    "three": "^0.187.0"
+  }
+}

@@ -1,0 +1,11 @@
+.moebius-filter, .moebius-filter[popover] { --open-height: min(330px, var(--available-height)); width: min(230px, 100cqw); }
+.moebius-filter[popover] { width: min(230px, 100dvw); }
+.moebius-filter.collapsed { width: 66px; }
+.moebius-filter .rail-toggle { align-self: flex-end; margin-right: 21px; }
+.moebius-filter .rail-cap::after, .moebius-filter.collapsed .rail-cap::after {
+  width: 9px; height: 12px; border: 1px solid currentColor; border-radius: 1px 1px 5px 5px;
+  transform: rotate(35deg); clip-path: polygon(0 0, 100% 0, 100% 65%, 50% 100%, 0 65%);
+  background: linear-gradient(currentColor, currentColor) center bottom / 1px 8px no-repeat;
+}
+.moebius-filter[data-active] .rail-cap { background: var(--theme-ink); color: var(--theme-surface); }
+.moebius-filter .rail-body { align-items: stretch; justify-content: space-between; gap: 12px; padding: 5px 12px 6px; overflow-y: auto; touch-action: pan-y; font: 10px/1.4 var(--font-mono); }

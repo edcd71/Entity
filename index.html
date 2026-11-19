@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
+<script>
+  if (location.protocol === 'file:') {
+    window.stop();
+    location.replace('http://127.0.0.1:4173/' + location.search + location.hash);
+  }
+</script>
+<meta name="theme-color" content="#000000"><title>Entity</title>
+<link rel="icon" href="/favicon.svg"><link rel="stylesheet" href="/assets/fonts/fonts.css"><link rel="stylesheet" href="/app/sphere.css">
+<link rel="stylesheet" href="/app/image-metadata.css">
+<script type="importmap">{"imports":{"three":"/app/vendor/three.module.js"}}</script>
+</head>
+<body>
+<main id="stage" aria-labelledby="entity-title">
+  <header class="intro">
+    <h1 id="entity-title">Entity</h1>
+    <p>Explore a camera roll suspended in a nebula. Drag to orbit, then zoom in and select a photo or video.</p>
+    <a class="grid-link" href="/app/grid.html">Photo grid</a>
+  </header>
+  <p id="loading" class="sr-only" role="status">Loading sphere…</p>
+</main>
+<span id="announcement" class="sr-only" aria-live="polite"></span>
+<dialog id="viewer" tabindex="-1" aria-label="Media viewer. Tap the media or press Escape to return to the sphere. Arrow keys change media. Space pauses video.">
+<nav class="detail-nav" aria-label="Detail columns"></nav>
+<div class="photo-layout">
+  <div id="media" class="photo-image" role="region" aria-label="A · Media" tabindex="0"></div>
+  <aside class="photo-palette" aria-label="Image colors" tabindex="0" hidden>
+    <ol class="swatch-list"></ol>
+  </aside>
+  <aside class="photo-metadata" aria-label="Image metadata" tabindex="0" hidden></aside>
+</div>
+</dialog>
+<script type="module" src="/app/sphere.js"></script>
+</body></html>

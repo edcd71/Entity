@@ -1,0 +1,32 @@
+import { icon } from './icons.js';
+const escape=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
+const imageURL=p=>'/'+p.split('/').map(encodeURIComponent).join('/');
+const monthLabel=key=>key==='undated'?'Date unavailable':new Date(key+'-15T12:00:00').toLocaleDateString('en-US',{month:'long',year:'numeric'});
+export function chronologyGroups(items){const groups=new Map();for(const item of items){const key=item.capturedAt?.slice(0,7)||'undated';if(!groups.has(key))groups.set(key,[]);groups.get(key).push(item)}return [...groups].filter(([key])=>key!=='undated').sort(([a],[b])=>a.localeCompare(b)).concat(groups.has('undated')?[['undated',groups.get('undated')]]:[])}
+export function chronologyMarkup(){return `<section class="chronology" aria-label="Chronological media navigation"><div class="chronology-intro"><span class="micro">A DIFFERENT WAY THROUGH</span><h2>Turn back<br>the moments.</h2><p>A month on every face.<br>Rotate to see what comes next.</p><div class="cube-key"><span>↔</span><span class="micro">DRAG TO TURN · ← → TO STEP</span></div></div><div class="cube-scene-wrap"><div class="cube-scene" tabindex="0" role="slider" aria-label="Capture month" aria-valuemin="1" aria-valuemax="1" aria-valuenow="1" aria-valuetext="Loading"><div class="chronology-cube"><div class="cube-face face-front"></div><div class="cube-face face-right"></div><div class="cube-face face-back"></div><div class="cube-face face-left"></div><div class="cube-face face-top"></div><div class="cube-face face-bottom"></div></div></div><div class="cube-ground"></div></div><div class="chronology-period"><span class="micro">CURRENT CHAPTER</span><h3 id="cube-period-title"></h3><p id="cube-period-count"></p><div class="cube-stepper"><button class="outline-button" id="cube-prev" aria-label="Previous month">←</button><span class="micro" id="cube-progress"></span><button class="outline-button" id="cube-next" aria-label="Next month">→</button></div><label class="month-jump"><span class="sr-only">Jump to capture month</span><select id="cube-month"></select></label></div></section><div class="timeline-chapter"><h2 id="chapter-title"></h2><span class="micro" id="chapter-count"></span></div><div id="chapter-grid"></div>`}
+export function mountChronology(container,items,selectedKey,onChange){
+ const groups=chronologyGroups(items);if(!groups.length)return;
+ let index=groups.findIndex(([key])=>key===selectedKey);if(index<0)index=Math.max(0,groups.filter(([key])=>key!=='undated').length-1);
+ let quarter=0,drag=null,suppressClick=false;
+ const scene=container.querySelector('.cube-scene'),cube=container.querySelector('.chronology-cube'),select=container.querySelector('#cube-month');
+ const names=['front','right','back','left'];
+ select.innerHTML=groups.map(([key,list],i)=>`<option value="${i}">${monthLabel(key)} · ${list.length}</option>`).join('');
+ scene.setAttribute('aria-valuemax',String(groups.length));
+ function fillFace(face,group){
+  const el=container.querySelector('.face-'+face);if(!group){el.innerHTML=`<div class="cube-end"><span>entity.</span><p>The edge of this archive.</p></div>`;return}
+  const [key,list]=group,previews=[...list.filter(i=>i.preview&&i.type==='image'),...list.filter(i=>i.preview&&i.type==='video')];const picks=[0,Math.floor(previews.length/3),Math.floor(previews.length*2/3),previews.length-1].map(i=>previews[Math.max(0,i)]).filter(Boolean);
+  el.innerHTML=`<div class="cube-face-images">${picks.length?picks.map(item=>`<img src="${imageURL(item.preview)}" alt="" draggable="false">`).join(''):`<div class="cube-end">${icon('camera')}</div>`}</div><div class="cube-face-caption"><span>${monthLabel(key)}</span><span>${list.length} frames</span></div>`;
+ }
+ function renderFaces(){for(const delta of [-1,0,1,2]){const phase=((quarter+delta)%4+4)%4;fillFace(names[phase],groups[index+delta])}fillFace('top',groups[index]);fillFace('bottom',groups[index])}
+ function rotation(extra=0,tilt=0){cube.style.transform=`rotateX(${-13+tilt}deg) rotateY(${-quarter*90+extra-22}deg)`}
+ function announce(){const [key,list]=groups[index];container.querySelector('#cube-period-title').textContent=monthLabel(key);container.querySelector('#cube-period-count').textContent=`${list.length.toLocaleString('en-US')} ${list.length===1?'frame':'frames'} to explore`;container.querySelector('#cube-progress').textContent=`${String(index+1).padStart(2,'0')} / ${String(groups.length).padStart(2,'0')}`;container.querySelector('#cube-prev').disabled=index===0;container.querySelector('#cube-next').disabled=index===groups.length-1;select.value=String(index);scene.setAttribute('aria-valuenow',String(index+1));scene.setAttribute('aria-valuetext',monthLabel(key));onChange(key,list,monthLabel(key))}
+ function step(delta){const target=Math.max(0,Math.min(groups.length-1,index+delta));if(target===index){rotation();return}quarter+=target-index;index=target;renderFaces();rotation();announce()}
+ renderFaces();rotation();announce();
+ container.querySelector('#cube-prev').onclick=()=>step(-1);container.querySelector('#cube-next').onclick=()=>step(1);select.onchange=()=>step(Number(select.value)-index);
+ scene.addEventListener('keydown',event=>{if(['ArrowRight','ArrowUp','ArrowLeft','ArrowDown','Home','End'].includes(event.key)){event.preventDefault();step(event.key==='Home'?-index:event.key==='End'?groups.length-1-index:['ArrowRight','ArrowUp'].includes(event.key)?1:-1)}});
+ scene.addEventListener('pointerdown',event=>{if(event.button!==0)return;drag={x:event.clientX,y:event.clientY};scene.setPointerCapture(event.pointerId);scene.classList.add('dragging');cube.style.transition='none';event.preventDefault()});
+ scene.addEventListener('pointermove',event=>{if(!drag)return;rotation((event.clientX-drag.x)/2.3,Math.max(-12,Math.min(12,(drag.y-event.clientY)/12)))});
+ const finish=event=>{if(!drag)return;const dx=event.clientX-drag.x;drag=null;scene.classList.remove('dragging');cube.style.transition='';const delta=Math.abs(dx)>35?(dx<0?1:-1):0;suppressClick=Math.abs(dx)>5;if(delta)step(delta);else rotation()};
+ scene.addEventListener('pointerup',finish);scene.addEventListener('pointercancel',()=>{drag=null;scene.classList.remove('dragging');cube.style.transition='';rotation()});scene.addEventListener('lostpointercapture',()=>{if(drag){drag=null;scene.classList.remove('dragging');cube.style.transition='';rotation()}});
+ scene.addEventListener('click',()=>{if(suppressClick){suppressClick=false;return}scene.focus()});
+}

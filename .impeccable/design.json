@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 2,
+  "name": "entity",
+  "description": "A diffuse sphere of media particles on black.",
+  "tokens": {
+    "colors": {
+      "background": "#000000",
+      "foreground": "#eeeeee",
+      "muted": "#999999"
+    },
+    "typography": {
+      "body": {
+        "fontFamily": "Geist Serif, Georgia, serif",
+        "fontSize": "12px"
+      },
+      "metadata": {
+        "fontFamily": "Geist Mono, monospace",
+        "fontSize": "10px"
+      }
+    }
+  },
+  "components": []
+}

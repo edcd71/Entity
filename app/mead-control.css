@@ -1,0 +1,12 @@
+.mead-filter, .mead-filter[popover] { --open-height: min(330px, var(--available-height)); width: min(230px, 100cqw); }
+.mead-filter[popover] { width: min(230px, 100dvw); }
+.mead-filter.collapsed { width: 66px; }
+.mead-filter .rail-toggle { align-self: flex-end; margin-right: 21px; }
+.mead-filter .rail-cap::after, .mead-filter.collapsed .rail-cap::after {
+  width: 11px; height: 9px; border: solid currentColor; border-width: 1px 1px 2px;
+  transform: skewY(-22deg); border-radius: 1px;
+  background: linear-gradient(145deg, transparent 40%, currentColor 42% 49%, transparent 51%);
+}
+.mead-filter[data-active] .rail-cap { background: var(--theme-ink); color: var(--theme-surface); }
+.mead-filter .rail-body { align-items: stretch; justify-content: space-between; gap: 12px; padding: 5px 12px 6px; overflow-y: auto; touch-action: pan-y; font: 10px/1.4 var(--font-mono); }
+.photo img[data-grid-effect] { object-fit: fill; }

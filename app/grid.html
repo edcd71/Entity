@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en" data-theme="blue">
+<head>
+  <meta charset="utf-8">
+  <script>
+    // Modules, media requests, and root-relative assets require the local server.
+    if (location.protocol === 'file:') {
+      window.stop();
+      location.replace('http://127.0.0.1:4173/app/grid.html' + location.search + location.hash);
+    }
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <title>Photo grid · Entity</title>
+  <link rel="icon" href="/favicon.svg">
+  <link rel="stylesheet" href="/assets/fonts/fonts.css">
+  <link rel="stylesheet" href="/app/grid.css">
+  <link rel="stylesheet" href="/app/image-metadata.css">
+  <link rel="stylesheet" href="/app/themes.css">
+  <link rel="stylesheet" href="/app/location-control.css">
+  <link rel="stylesheet" href="/app/time-control.css">
+  <link rel="stylesheet" href="/app/moments-control.css">
+  <link rel="stylesheet" href="/app/slideshow.css">
+  <link rel="stylesheet" href="/app/pixel-control.css">
+  <link rel="stylesheet" href="/app/mead-control.css">
+  <link rel="stylesheet" href="/app/moebius-control.css">
+  <link rel="stylesheet" href="/app/workspace.css">
+  <script>
+    let theme = 'blue';
+    try {
+      const saved = localStorage.getItem('entity-theme');
+      if (['light', 'dark', 'blue'].includes(saved)) theme = saved;
+    } catch {}
+    document.documentElement.dataset.theme = theme;
+    document.querySelector('meta[name="theme-color"]').content = {light: '#f6f5f0', dark: '#151517', blue: '#2047df'}[theme];
+    document.documentElement.classList.add('grid-loading');
+    // Keep the card readable if the module or image index fails to load.
+    setTimeout(() => document.documentElement.classList.remove('grid-loading'), 2500);
+  </script>
+</head>
+<body>
+  <main>
+    <section class="collection workspace" data-card-state="open" aria-label="Media workspace">
+        <header id="entity-card" class="lead-card">
+          <h1 data-motion="full">Entity</h1>
+          <p class="lead-quote">“Playground to explore what I can do with Codex to manage and tweak the media I've taken with my iPhone.”</p>
+          <p class="collection-label"><span role="status" id="grid-status">Loading images…</span> <span id="date-summary"></span><a href="/app/projects/overland-ai/index.html" style="display: block; width: fit-content; margin-top: .55rem; color: inherit; text-underline-offset: .2em;">Field-test replay project</a></p>
+        </header>
+        <button class="workspace-splitter" type="button" role="separator" aria-orientation="vertical" aria-controls="entity-card" aria-label="Resize or hide title card" aria-valuemin="0" aria-valuemax="600" aria-valuenow="440" title="Drag left or click to dock controls. Click again to restore the title card."><span aria-hidden="true"></span></button>
+        <aside id="control-surface" class="workspace-controls" aria-label="Media controls">
+          <div class="rail-surface-heading">Controls</div>
+          <div class="control-scroll" tabindex="0" aria-label="Scroll media controls">
+            <div class="control-dock">
+              <fieldset class="date-filter control-rail collapsed" aria-label="Capture dates" disabled>
+                <span class="pad-title" aria-hidden="true">Date</span>
+                <button type="button" class="rail-grip" aria-label="Move date rail with the arrow keys" title="Drag the rail anywhere in the window"></button>
+                <button type="button" class="rail-toggle" aria-label="Long press to open date range" aria-controls="date-body" aria-expanded="false" title="Long press to open date range">
+                  <span class="rail-cap" aria-hidden="true">
+                    <svg class="rail-hold-ring" viewBox="0 0 24 24" focusable="false">
+                      <circle cx="12" cy="12" r="9" pathLength="1" />
+                    </svg>
+                  </span>
+                </button>
+                <div id="date-body" class="rail-body" inert>
+                  <span class="year-limit" aria-hidden="true">2026</span>
+                  <div class="date-axis" data-rail-input tabindex="0" role="group" aria-label="Capture year range" aria-description="Up and down change the latest year. Hold Shift to change the earliest year. Page Up and Page Down move five years.">
+                    <div class="date-rail">
+                      <span class="date-span" aria-hidden="true"></span>
+                      <span class="date-node end-node" role="slider" aria-label="Latest year" aria-orientation="vertical" tabindex="-1"></span>
+                      <span class="date-node start-node" role="slider" aria-label="Earliest year" aria-orientation="vertical" tabindex="-1"></span>
+                    </div>
+                  </div>
+                  <span class="year-limit" aria-hidden="true">2022</span>
+                </div>
+              </fieldset>
+              <fieldset class="time-filter control-rail collapsed" aria-label="Capture time" disabled>
+                <button type="button" class="rail-grip" aria-label="Move time control with the arrow keys" title="Drag the time control anywhere in the window"></button>
+                <span class="pad-title" aria-hidden="true">Time</span>
+                <button type="button" class="rail-toggle" aria-controls="time-body" aria-expanded="false" aria-label="Long press to open time of day" title="Long press to open time of day">
+                  <span class="rail-cap" aria-hidden="true">
+                    <svg class="rail-hold-ring" viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="9" pathLength="1" /></svg>
+                  </span>
+                </button>
+                <div id="time-body" class="rail-body" data-rail-input inert>
+                  <div class="time-clock" role="group" aria-label="24-hour capture clock">
+                    <svg class="time-face" viewBox="0 0 240 240" aria-hidden="true" focusable="false">
+                      <circle class="time-track" cx="120" cy="120" r="82" />
+                      <g class="time-ticks"></g>
+                      <path class="time-arc" />
+                      <g class="time-leaders"><line class="time-start-leader" /><line class="time-end-leader" /></g>
+                      <text x="120" y="13">00</text><text x="226" y="120">06</text><text x="120" y="228">12</text><text x="14" y="120">18</text>
+                    </svg>
+                    <button type="button" class="time-handle time-start" data-handle="start" role="slider" aria-label="Start time" aria-valuemin="0" aria-valuemax="1439" aria-valuenow="0" aria-description="Drag around the clock in 15-minute steps. Arrow keys change one minute, Shift changes 15 minutes, and Page Up or Down changes one hour. Equal start and end times select all day."><span aria-hidden="true">S</span></button>
+                    <button type="button" class="time-handle time-end" data-handle="end" role="slider" aria-label="End time" aria-valuemin="0" aria-valuemax="1439" aria-valuenow="0" aria-description="The selected range runs clockwise from start to end and may cross midnight. Arrow keys change one minute, Shift changes 15 minutes, and Page Up or Down changes one hour. Equal start and end times select all day."><span aria-hidden="true">E</span></button>
+                  </div>
+                  <div class="time-readout" aria-hidden="true"><span>From<strong class="time-start-value">00:00</strong></span><span>To<strong class="time-end-value">24:00</strong></span></div>
+                  <div class="time-footer"><output class="time-summary">All day</output><button type="button" class="time-reset" aria-label="Reset time to all day" disabled>Reset</button></div>
+                </div>
+              </fieldset>
+              <fieldset class="color-filter control-rail collapsed" aria-label="Color sampling" disabled>
+                <button type="button" class="rail-grip" aria-label="Move color pad with the arrow keys" title="Drag the color pad anywhere in the window"></button>
+                <span class="pad-title" aria-hidden="true">Color</span>
+                <button type="button" class="rail-toggle" aria-controls="color-body" aria-expanded="false" aria-label="Long press to open color pad" title="Long press to open color pad">
+                  <span class="rail-cap" aria-hidden="true">
+                    <svg class="rail-hold-ring" viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="9" pathLength="1" /></svg>
+                  </span>
+                </button>
+                <div id="color-body" class="rail-body" inert>
+                  <div class="sample-pad" data-rail-input>
+                    <canvas class="sample-field" width="256" height="160" tabindex="0" role="group" aria-label="Color sampling pad" title="Drag to sample. Release to sort by color." aria-description="Drag to sample. Release to sort. Left and right change saturation. Up and down change brightness."></canvas>
+                    <span class="sample-cursor" aria-hidden="true"></span>
+                    <canvas class="sample-loupe" width="48" height="48" aria-hidden="true"></canvas>
+                  </div>
+                  <input class="sample-hue" type="range" min="0" max="359" value="228" aria-label="Color hue" data-rail-input>
+                  <div class="sample-readout">
+                    <output aria-label="Sampled hex color"></output>
+                    <button type="button" class="clear-color" aria-label="Clear color sort" data-rail-input disabled>Clear</button>
+                  </div>
+                </div>
+              </fieldset>
+              <fieldset class="location-filter control-rail collapsed" aria-label="Capture locations" disabled>
+                <button type="button" class="rail-grip" aria-label="Move location filter with the arrow keys" title="Drag the location filter anywhere in the window"></button>
+                <span class="pad-title" aria-hidden="true">Location</span>
+                <button type="button" class="rail-toggle" aria-controls="location-body" aria-expanded="false" aria-label="Long press to open location filter" title="Long press to open location filter">
+                  <span class="rail-cap" aria-hidden="true">
+                    <svg class="rail-hold-ring" viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="9" pathLength="1" /></svg>
+                  </span>
+                </button>
+                <div id="location-body" class="rail-body" data-rail-input inert>
+                  <input class="location-search" type="search" placeholder="Find a place" aria-label="Find a place" autocomplete="off" spellcheck="false">
+                  <div class="location-options" role="radiogroup" aria-label="Capture location"></div>
+                  <p class="location-empty" role="status" hidden>No matching places.</p>
+                  <p class="location-hint">Areas use nearby towns. <a href="https://www.geonames.org/" target="_blank" rel="noreferrer">GeoNames</a></p>
+                </div>
+              </fieldset>
+              <fieldset class="moments-filter control-rail collapsed" aria-label="Capture moments" disabled>
+                <button type="button" class="rail-grip" aria-label="Move moments control with the arrow keys" title="Drag the moments control anywhere in the window"></button>
+                <span class="pad-title" aria-hidden="true">Moments</span>
+                <button type="button" class="rail-toggle" aria-controls="moments-body" aria-expanded="false" aria-label="Long press to open moments" title="Long press to open moments">
+                  <span class="rail-cap" aria-hidden="true">
+                    <svg class="rail-hold-ring" viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="9" pathLength="1" /></svg>
+                  </span>
+                </button>
+                <div id="moments-body" class="rail-body" data-rail-input inert>
+                  <input class="moment-search" type="search" placeholder="Find a moment" aria-label="Find a moment" autocomplete="off" spellcheck="false">
+                  <div class="moment-options" role="radiogroup" aria-label="Capture moment">
+                    <label class="moment-option moment-all"><input type="radio" name="capture-moment" value="all" aria-label="All moments" checked><span class="moment-name"><span>All moments</span></span><span class="moment-count" aria-hidden="true"></span></label>
+                    <div class="moment-list"></div>
+                  </div>
+                  <p class="moment-empty" role="status" hidden>No matching moments.</p>
+                  <p class="moment-hint">Grouped by time &amp; place</p>
+                </div>
+              </fieldset>
+              <fieldset class="slideshow-filter control-rail collapsed" aria-label="Slideshow control" disabled>
+                <button type="button" class="rail-grip" aria-label="Move slideshow control with the arrow keys" title="Drag the slideshow control anywhere in the window"></button>
+                <span class="pad-title" aria-hidden="true">Slideshow</span>
+                <button type="button" class="rail-toggle" aria-controls="slideshow-body" aria-expanded="false" aria-label="Long press to open slideshow control" title="Long press to open slideshow control">
+                  <span class="rail-cap" aria-hidden="true">
+                    <svg class="rail-hold-ring" viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="9" pathLength="1" /></svg>
+                  </span>
+                </button>
+                <div id="slideshow-body" class="rail-body" data-rail-input inert>
+                  <p class="slideshow-count">Loading photos…</p>
+                  <button type="button" class="slideshow-start" disabled>Start slideshow</button>
+                </div>
+              </fieldset>
+              <fieldset class="pixel-filter control-rail collapsed" aria-label="Pixel art control" disabled>
+                <button type="button" class="rail-grip" aria-label="Move pixel art control with the arrow keys" title="Drag the rail anywhere in the window"></button>
+                <span class="pad-title" aria-hidden="true">Pixel art</span>
+                <button type="button" class="rail-toggle" aria-controls="pixel-body" aria-expanded="false" aria-label="Long press to open pixel art" title="Long press to open pixel art">
+                  <span class="rail-cap" aria-hidden="true"><svg class="rail-hold-ring" viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="9" pathLength="1" /></svg></span>
+                </button>
+                <div id="pixel-body" class="rail-body" data-rail-input inert>
+                  <div class="pixel-options" role="radiogroup" aria-label="Grid image style">
+                    <label class="pixel-option"><input type="radio" name="pixel-mode" value="original" checked><span>Original</span></label>
+                    <label class="pixel-option"><input type="radio" name="pixel-mode" value="art"><span>Pixel art</span></label>
+                  </div>
+                  <div class="pixel-setting">
+                    <label class="pixel-size-label" for="pixel-size">Pixel size <output class="pixel-size-value" for="pixel-size" aria-hidden="true">6 px</output></label>
+                    <input id="pixel-size" class="pixel-size" type="range" min="2" max="16" step="1" value="6" disabled>
+                  </div>
+                  <div class="pixel-setting">
+                    <span id="pixel-colors-label">Colors per image</span>
+                    <div class="pixel-options" role="radiogroup" aria-labelledby="pixel-colors-label">
+                      <label class="pixel-option"><input type="radio" name="pixel-colors" value="8" aria-label="8 colors" disabled><span>8</span></label>
+                      <label class="pixel-option"><input type="radio" name="pixel-colors" value="16" aria-label="16 colors" checked disabled><span>16</span></label>
+                      <label class="pixel-option"><input type="radio" name="pixel-colors" value="32" aria-label="32 colors" disabled><span>32</span></label>
+                    </div>
+                  </div>
+                  <p class="pixel-hint">All grid images</p>
+                </div>
+              </fieldset>
+              <fieldset class="mead-filter control-rail collapsed" aria-label="Syd Mead control" disabled>
+                <button type="button" class="rail-grip" aria-label="Move Syd Mead control with the arrow keys" title="Drag the rail anywhere in the window"></button>
+                <span class="pad-title" aria-hidden="true">Syd Mead</span>
+                <button type="button" class="rail-toggle" aria-controls="mead-body" aria-expanded="false" aria-label="Long press to open Syd Mead effect" title="Long press to open Syd Mead effect">
+                  <span class="rail-cap" aria-hidden="true"><svg class="rail-hold-ring" viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="9" pathLength="1" /></svg></span>
+                </button>
+                <div id="mead-body" class="rail-body" data-rail-input inert>
+                  <div class="pixel-options" role="radiogroup" aria-label="Syd Mead effect">
+                    <label class="pixel-option"><input type="radio" name="mead-mode" value="off" aria-label="Syd Mead off" checked><span>Off</span></label>
+                    <label class="pixel-option"><input type="radio" name="mead-mode" value="on" aria-label="Syd Mead on"><span>On</span></label>
+                  </div>
+                  <div class="pixel-setting">
+                    <label class="pixel-size-label" for="mead-amount">Strength <output for="mead-amount" aria-hidden="true">80%</output></label>
+                    <input id="mead-amount" class="mead-range effect-range" data-mead-setting="amount" type="range" min="0" max="100" value="80" disabled>
+                  </div>
+                  <div class="pixel-setting">
+                    <label class="pixel-size-label" for="mead-lines">Linework <output for="mead-lines" aria-hidden="true">45%</output></label>
+                    <input id="mead-lines" class="mead-range effect-range" data-mead-setting="lines" type="range" min="0" max="100" value="45" disabled>
+                  </div>
+                  <div class="pixel-options" role="radiogroup" aria-label="Syd Mead palette">
+                    <label class="pixel-option"><input type="radio" name="mead-palette" value="daylight" aria-label="Daylight palette" checked disabled><span>Daylight</span></label>
+                    <label class="pixel-option"><input type="radio" name="mead-palette" value="neon" aria-label="Neon palette" disabled><span>Neon</span></label>
+                  </div>
+                  <p class="pixel-hint mead-hint">Syd Mead–inspired · all images</p>
+                </div>
+              </fieldset>
+              <fieldset class="moebius-filter control-rail collapsed" aria-label="Moebius control" disabled>
+                <button type="button" class="rail-grip" aria-label="Move Moebius control with the arrow keys" title="Drag the rail anywhere in the window"></button>
+                <span class="pad-title" aria-hidden="true">Moebius</span>
+                <button type="button" class="rail-toggle" aria-controls="moebius-body" aria-expanded="false" aria-label="Long press to open Moebius effect" title="Long press to open Moebius effect">
+                  <span class="rail-cap" aria-hidden="true"><svg class="rail-hold-ring" viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="9" pathLength="1" /></svg></span>
+                </button>
+                <div id="moebius-body" class="rail-body" data-rail-input inert>
+                  <div class="pixel-options" role="radiogroup" aria-label="Moebius effect">
+                    <label class="pixel-option"><input type="radio" name="moebius-mode" value="off" aria-label="Moebius off" checked><span>Off</span></label>
+                    <label class="pixel-option"><input type="radio" name="moebius-mode" value="on" aria-label="Moebius on"><span>On</span></label>
+                  </div>
+                  <div class="pixel-setting">
+                    <label class="pixel-size-label" for="moebius-amount">Strength <output for="moebius-amount" aria-hidden="true">85%</output></label>
+                    <input id="moebius-amount" class="moebius-range effect-range" data-moebius-setting="amount" type="range" min="0" max="100" value="85" disabled>
+                  </div>
+                  <div class="pixel-setting">
+                    <label class="pixel-size-label" for="moebius-lines">Linework <output for="moebius-lines" aria-hidden="true">65%</output></label>
+                    <input id="moebius-lines" class="moebius-range effect-range" data-moebius-setting="lines" type="range" min="0" max="100" value="65" disabled>
+                  </div>
+                  <div class="pixel-options" role="radiogroup" aria-label="Moebius palette">
+                    <label class="pixel-option"><input type="radio" name="moebius-palette" value="desert" aria-label="Desert palette" checked disabled><span>Desert</span></label>
+                    <label class="pixel-option"><input type="radio" name="moebius-palette" value="cosmic" aria-label="Cosmic palette" disabled><span>Cosmic</span></label>
+                  </div>
+                  <p class="pixel-hint moebius-hint">All grid images</p>
+                </div>
+              </fieldset>
+              <fieldset class="theme-filter control-rail collapsed" aria-label="Theme control" disabled>
+                <button type="button" class="rail-grip" aria-label="Move theme control with the arrow keys" title="Drag the theme control anywhere in the window"></button>
+                <span class="pad-title" aria-hidden="true">Theme</span>
+                <button type="button" class="rail-toggle" aria-controls="theme-body" aria-expanded="false" aria-label="Long press to open theme control" title="Long press to open theme control">
+                  <span class="rail-cap" aria-hidden="true">
+                    <svg class="rail-hold-ring" viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="9" pathLength="1" /></svg>
+                  </span>
+                </button>
+                <div id="theme-body" class="rail-body" data-rail-input inert>
+                  <div class="theme-options" role="radiogroup" aria-label="Appearance">
+                    <label class="theme-option"><input type="radio" name="appearance" value="light"><span class="theme-dot light-dot" aria-hidden="true"></span><span>Light</span></label>
+                    <label class="theme-option"><input type="radio" name="appearance" value="dark"><span class="theme-dot dark-dot" aria-hidden="true"></span><span>Dark</span></label>
+                    <label class="theme-option"><input type="radio" name="appearance" value="blue" checked><span class="theme-dot blue-dot" aria-hidden="true"></span><span>Blue</span></label>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </aside>
+        <div id="photos" role="group" aria-label="Images in capture order. Use the arrow keys to browse.">
+        <div class="photo-list"></div>
+      </div>
+    </section>
+  </main>
+  <dialog id="photo-viewer" aria-label="Photo viewer" aria-description="Tap the photo or press Escape to return to the grid.">
+    <nav class="detail-nav" aria-label="Detail columns"></nav>
+    <div class="photo-layout">
+      <div class="photo-image" role="region" aria-label="A · Image" tabindex="0" autofocus><img id="full-photo" alt="" title="Return to grid"></div>
+      <aside class="photo-palette" aria-label="Image colors" tabindex="0" hidden>
+        <ol class="swatch-list"></ol>
+      </aside>
+      <aside class="photo-metadata" aria-label="Image metadata" tabindex="0" hidden></aside>
+    </div>
+  </dialog>
+  <dialog id="slideshow-viewer" aria-labelledby="slideshow-title" aria-description="Use Left and Right to change photos, Space to pause or play, and Escape to return to the grid.">
+    <header class="slideshow-header">
+      <h2 id="slideshow-title">Slideshow</h2>
+      <time class="slideshow-date"></time>
+      <button type="button" class="slideshow-close" aria-label="Close slideshow" title="Close slideshow (Esc)"></button>
+    </header>
+    <div class="slideshow-stage" role="region" aria-label="Current photo" tabindex="0">
+      <img id="slideshow-photo" alt="">
+      <p class="slideshow-image-status" role="status"></p>
+    </div>
+    <div class="slideshow-dock">
+      <nav class="slideshow-strip" aria-label="Nearby photos"></nav>
+      <div class="slideshow-toolbar">
+        <div class="slideshow-transport" role="group" aria-label="Playback">
+          <button type="button" class="slideshow-previous" aria-label="Previous photo" title="Previous photo (←)"></button>
+          <button type="button" class="slideshow-play" aria-label="Pause slideshow" title="Pause slideshow (Space)" autofocus>Pause</button>
+          <button type="button" class="slideshow-next" aria-label="Next photo" title="Next photo (→)"></button>
+        </div>
+        <div class="slideshow-pagination" role="group" aria-label="Photo position">
+          <input type="number" aria-label="Photo number" title="Jump to a photo" min="1" step="1" inputmode="numeric">
+          <span aria-hidden="true">/ <span class="slideshow-total"></span></span>
+        </div>
+        <div class="slideshow-settings">
+          <select aria-label="Seconds per photo" title="Seconds per photo">
+            <option value="2">2 sec</option>
+            <option value="4" selected>4 sec</option>
+            <option value="8">8 sec</option>
+          </select>
+          <label><input type="checkbox">Loop</label>
+        </div>
+      </div>
+    </div>
+  </dialog>
+  <script type="module" src="/app/grid.js"></script>
+</body>
+</html>
