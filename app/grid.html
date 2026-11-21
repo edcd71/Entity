@@ -279,6 +279,7 @@
   <dialog id="slideshow-viewer" aria-labelledby="slideshow-title" aria-description="Use Left and Right to change photos, Space to pause or play, and Escape to return to the grid.">
     <header class="slideshow-header">
       <h2 id="slideshow-title">Slideshow</h2>
+      <span class="slideshow-filename"></span>
       <time class="slideshow-date"></time>
       <button type="button" class="slideshow-close" aria-label="Close slideshow" title="Close slideshow (Esc)"></button>
     </header>
@@ -287,6 +288,7 @@
       <p class="slideshow-image-status" role="status"></p>
     </div>
     <div class="slideshow-dock">
+      <progress class="slideshow-progress" max="1" value="0" aria-label="Time on this photo"></progress>
       <nav class="slideshow-strip" aria-label="Nearby photos"></nav>
       <div class="slideshow-toolbar">
         <div class="slideshow-transport" role="group" aria-label="Playback">

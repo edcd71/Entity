@@ -89,8 +89,10 @@ an excluded selected moment remains available with a zero count so it can be cle
 
 Hold the play button to open **Slideshow**, then choose **Start slideshow**.
 It plays full-size previews in the current grid order, including filters and color sorting.
-Pause or play, step with the arrow buttons, select a nearby thumbnail, or enter a photo
-number to jump. Choose 2, 4, or 8 seconds per photo and turn on Loop to repeat the set.
+The filename and capture date identify each photo, and a progress bar shows the time
+remaining before the next image. Pause or play, step with the arrow buttons, select a
+nearby thumbnail, or enter a photo number to jump. Choose 2, 4, or 8 seconds per photo
+and turn on Loop to repeat the set.
 From the photo area, Left and Right step through the photos and Space pauses or plays.
 Close the slideshow or press Escape to return to the grid.
 

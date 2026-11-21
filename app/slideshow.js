@@ -7,6 +7,7 @@ export function mountSlideshow(rail, dialog, getPhotos, onOpen) {
   const stage = dialog.querySelector('.slideshow-stage');
   const image = stage.querySelector('img');
   const status = stage.querySelector('.slideshow-image-status');
+  const filename = dialog.querySelector('.slideshow-filename');
   const date = dialog.querySelector('time');
   const close = dialog.querySelector('.slideshow-close');
   const previous = dialog.querySelector('.slideshow-previous');
@@ -17,8 +18,10 @@ export function mountSlideshow(rail, dialog, getPhotos, onOpen) {
   const pace = dialog.querySelector('.slideshow-settings select');
   const loop = dialog.querySelector('.slideshow-settings input');
   const strip = dialog.querySelector('.slideshow-strip');
+  const progress = dialog.querySelector('.slideshow-progress');
   let photos = [], index = 0, playing = false;
-  let timer, revision = 0, editingNumber = false;
+  let timer, progressTimer, progressStartedAt = 0, progressElapsed = 0;
+  let revision = 0, editingNumber = false;
 
   const thumbnails = Array.from({length: 5}, () => {
     const button = document.createElement('button');
@@ -67,13 +70,29 @@ export function mountSlideshow(rail, dialog, getPhotos, onOpen) {
   }
 
   function schedule() {
+    if (progressStartedAt) {
+      progressElapsed += performance.now() - progressStartedAt;
+      progressStartedAt = 0;
+    }
     clearTimeout(timer);
+    clearInterval(progressTimer);
+    const duration = Number(pace.value) * 1000;
+    progress.value = Math.min(progressElapsed / duration, 1);
     if (!dialog.open || !playing || document.hidden || stage.dataset.imageState === 'loading') return;
+    const remaining = Math.max(0, duration - progressElapsed);
+    progressStartedAt = performance.now();
+    progressTimer = setInterval(() => {
+      progress.value = Math.min((progressElapsed + performance.now() - progressStartedAt) / duration, 1);
+    }, 50);
     timer = setTimeout(() => {
       if (!dialog.open || document.hidden) return;
+      clearInterval(progressTimer);
+      progressStartedAt = 0;
+      progressElapsed = 0;
+      progress.value = 1;
       if (index === photos.length - 1 && !loop.checked) setPlaying(false);
       else step(1);
-    }, Number(pace.value) * 1000);
+    }, remaining);
   }
 
   function setPlaying(value) {
@@ -88,9 +107,14 @@ export function mountSlideshow(rail, dialog, getPhotos, onOpen) {
     const request = ++revision;
     index = position;
     const photo = photos[index];
+    filename.textContent = photo.name;
+    filename.title = photo.name;
     date.dateTime = date.textContent = photo.capturedAt.slice(0, 10);
     image.alt = photo.name;
     stage.dataset.imageState = 'loading';
+    progressElapsed = 0;
+    progressStartedAt = 0;
+    progress.value = 0;
     status.hidden = false;
     status.textContent = 'Loading photo…';
     updatePagination();
@@ -159,10 +183,13 @@ export function mountSlideshow(rail, dialog, getPhotos, onOpen) {
   dialog.addEventListener('close', () => {
     if (dialog.open) return;
     clearTimeout(timer);
+    clearInterval(progressTimer);
     revision++;
     playing = false;
     photos = [];
     image.removeAttribute('src');
+    progressElapsed = 0;
+    progress.value = 0;
     updatePagination();
   });
   previous.addEventListener('click', () => step(-1));
