@@ -69,6 +69,22 @@ export function mountSlideshow(rail, dialog, getPhotos, onOpen) {
     });
   }
 
+  function applyPalette(photo) {
+    const colors = (photo.palette || []).map(color => color.hex).filter(color => /^#[\da-f]{6}$/i.test(color));
+    if (!colors.length) {
+      dialog.style.removeProperty('--slideshow-accent');
+      dialog.style.removeProperty('--slideshow-accent-ink');
+      dialog.style.removeProperty('--slideshow-swatches');
+      return;
+    }
+    const [red, green, blue] = colors[0].slice(1).match(/../g).map(value => parseInt(value, 16) / 255).map(value =>
+      value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4);
+    const luminance = 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+    dialog.style.setProperty('--slideshow-accent', colors[0]);
+    dialog.style.setProperty('--slideshow-accent-ink', luminance > 0.38 ? '#151517' : '#fff');
+    dialog.style.setProperty('--slideshow-swatches', `linear-gradient(90deg, ${colors.join(', ')})`);
+  }
+
   function schedule() {
     if (progressStartedAt) {
       progressElapsed += performance.now() - progressStartedAt;
@@ -107,6 +123,7 @@ export function mountSlideshow(rail, dialog, getPhotos, onOpen) {
     const request = ++revision;
     index = position;
     const photo = photos[index];
+    applyPalette(photo);
     filename.textContent = photo.name;
     filename.title = photo.name;
     date.dateTime = date.textContent = photo.capturedAt.slice(0, 10);
