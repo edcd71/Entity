@@ -160,8 +160,7 @@
                   </span>
                 </button>
                 <div id="slideshow-body" class="rail-body" data-rail-input inert>
-                  <p class="slideshow-count">Loading photos…</p>
-                  <button type="button" class="slideshow-start" disabled>Start slideshow</button>
+                  <button type="button" class="slideshow-start" disabled>On</button>
                 </div>
               </fieldset>
               <fieldset class="pixel-filter control-rail collapsed" aria-label="Pixel art control" disabled>
@@ -276,38 +275,12 @@
       <aside class="photo-metadata" aria-label="Image metadata" tabindex="0" hidden></aside>
     </div>
   </dialog>
-  <dialog id="slideshow-viewer" aria-labelledby="slideshow-title" aria-description="Use Left and Right to change photos, Space to pause or play, and Escape to return to the grid.">
-    <header class="slideshow-header">
-      <h2 id="slideshow-title">Slideshow</h2>
-      <span class="slideshow-filename"></span>
-      <time class="slideshow-date"></time>
-      <button type="button" class="slideshow-close" aria-label="Close slideshow" title="Close slideshow (Esc)"></button>
-    </header>
+  <dialog id="slideshow-viewer" aria-label="Slideshow" aria-description="The slideshow advances through the current photos. Press Escape to return to the grid.">
     <div class="slideshow-stage" role="region" aria-label="Current photo" tabindex="0">
       <img id="slideshow-photo" alt="">
       <p class="slideshow-image-status" role="status"></p>
-    </div>
-    <div class="slideshow-dock">
-      <progress class="slideshow-progress" max="1" value="0" aria-label="Time on this photo"></progress>
-      <nav class="slideshow-strip" aria-label="Nearby photos"></nav>
-      <div class="slideshow-toolbar">
-        <div class="slideshow-transport" role="group" aria-label="Playback">
-          <button type="button" class="slideshow-previous" aria-label="Previous photo" title="Previous photo (←)"></button>
-          <button type="button" class="slideshow-play" aria-label="Pause slideshow" title="Pause slideshow (Space)" autofocus>Pause</button>
-          <button type="button" class="slideshow-next" aria-label="Next photo" title="Next photo (→)"></button>
-        </div>
-        <div class="slideshow-pagination" role="group" aria-label="Photo position">
-          <input type="number" aria-label="Photo number" title="Jump to a photo" min="1" step="1" inputmode="numeric">
-          <span aria-hidden="true">/ <span class="slideshow-total"></span></span>
-        </div>
-        <div class="slideshow-settings">
-          <select aria-label="Seconds per photo" title="Seconds per photo">
-            <option value="2">2 sec</option>
-            <option value="4" selected>4 sec</option>
-            <option value="8">8 sec</option>
-          </select>
-          <label><input type="checkbox">Loop</label>
-        </div>
+      <div class="slideshow-progress" role="progressbar" aria-label="Time elapsed on this photo" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <svg viewBox="0 0 44 44" aria-hidden="true"><circle class="slideshow-progress-track" cx="22" cy="22" r="19" pathLength="100"></circle><circle class="slideshow-progress-value" cx="22" cy="22" r="19" pathLength="100"></circle></svg>
       </div>
     </div>
   </dialog>
